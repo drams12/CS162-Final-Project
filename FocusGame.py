@@ -20,7 +20,7 @@ class Movement:
 class FocusGame:
     def __init__(self, player, color):
         self._Player = (player, color)
-        self._reserve = {self._Player[0][0]:['R'],self._Player[1][0]:['G']}
+        self._reserve = {self._Player[0][0]:['R', 'R', 'R'],self._Player[1][0]:[]}
         self._captured = {self._Player[0][0]:[],self._Player[1][0]:[]}
         self._gameboard = [] #contains row, column, set of color stack
 
@@ -35,6 +35,7 @@ class FocusGame:
         # Gameboard setup completed
         print(self._gameboard)
         print(self._reserve)
+        print(self._Player)
 
     def move_piece(self, player, start, end, pieces):
         '''
@@ -85,17 +86,24 @@ class FocusGame:
         Takes the player name and a location on the board as parameters and places the piece from
         the reserve at that location.
         '''
-        try:
-            if player in self._reserve.keys() and len(self._reserve[player]) > 0:
-                for x in range(len(self._gameboard)):
-                    if location == self._gameboard[x][0]:
-                        self._gameboard[x][1].append(self._Player[player][1]) and self._reserve[player].pop(1)
+        color = None
+        for i in range(len(self._Player)):
+            if player in self._Player[i]:
+                color = (self._Player[i][1])
 
-        except:
-            return 'no pieces in reserve'
+        if player in self._reserve.keys() and len(self._reserve[player]) > 0:
+            for x in range(len(self._gameboard)):
+                if location == self._gameboard[x][0]:
+                    self._reserve[player].pop(0)
+                    return self._gameboard[x][1].append(color)
+        else:
+            return Exception('no pieces in reserve')
 
-
-
+    def get_gameboard(self):
+        '''
+        Returns the current state of the gameboard
+        '''
+        return self._gameboard
 
 
 
@@ -105,9 +113,14 @@ class FocusGame:
 
 
 game = FocusGame(('PlayerA', 'R'), ('PlayerB','G'))
+print(game.get_gameboard())
 print(game.show_reserve('PlayerA'))
 # game.move_piece('PlayerA',(0,0), (0,1), 1)  #Returns message "successfully moved"
 print(game.show_pieces((0,1))) #Returns ['R','R']
 # game.show_captured('PlayerA') # Returns 0
+print(game._reserve['PlayerA'])
 print(game.reserved_move('PlayerA', (0,0))) # Returns message "No pieces in reserve"
-# game.show_reserve('PlayerA') # Returns 0
+print(game._reserve['PlayerA'])
+
+print(game.show_reserve('PlayerA')) # Returns 0
+print(game.get_gameboard())
