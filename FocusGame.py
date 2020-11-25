@@ -2,22 +2,40 @@
 # Date: 11/21/2020
 # Description:
 
+
+class Movement:
+    def __init__(self):
+        pass
+
+    def correct_piece(self):
+        '''
+        Validates that the player has selected a valid piece, with the intent to be used as composition
+         in the FocusGame class.
+        '''
+
+    def legal_move(self):
+        '''Validates that the player is making a legal move, intended to be used in composition in '''
+
+
 class FocusGame:
     def __init__(self, player, color):
         self._Player = (player, color)
+        self._reserve = {self._Player[0][0]:[],self._Player[1][0]:[]}
+        self._captured = {self._Player[0][0]:[],self._Player[1][0]:[]}
+        self._gameboard = [] #contains row, column, set of color stack
 
-        self._gameboard = []
         add_color1 = [2,3,6,7,10,11,14,15,18,19,22,23,26,27,30,31,34,35]
         add_color2 = [0,1,4,5,8,9,12,13,16,17,20,21,24,25,28,29,32,33]
 
         for i in range(6):
             for x in range(6):
-                self._gameboard.append([x,i])
+                self._gameboard.append([i, x])
         self._half = [i.append([self._Player[1][1]]) for j, i in enumerate(self._gameboard) if j in add_color1]
         self._final = [i.append([self._Player[0][1]]) for j, i in enumerate(self._gameboard) if j in add_color2]
-
+        # Gameboard setup completed
         print(self._gameboard)
-
+        print(self._reserve)
+        print(self._captured)
     def move_piece(self, player, start, end, pieces):
         '''
         Takes the player making the move, a tuple representing the starting location, another tuple representing the
@@ -43,12 +61,21 @@ class FocusGame:
         '''
         Takes a player as a parameter and shows how many pices they have in resesrve
         '''
-
+        if player in self._reserve:
+            if self._reserve[player] is None:
+                return 0
+            else:
+                return len(self._reserve[player])
 
     def show_captured(self, player):
         '''
         Takes a player name as a parameter and shows the number of pieces that player has captured
         '''
+        if player in self._captured:
+            if self._captured[player] is None:
+                return 0
+            else:
+                return len(self._captured[player])
 
 
     def reserved_move(self, player, location):
@@ -70,6 +97,7 @@ class FocusGame:
 
 
 game = FocusGame(('PlayerA', 'R'), ('PlayerB','G'))
+print(game.show_reserve('PlayerB'))
 # game.move_piece('PlayerA',(0,0), (0,1), 1)  #Returns message "successfully moved"
 # game.show_pieces((0,1)) #Returns ['R','R']
 # game.show_captured('PlayerA') # Returns 0
