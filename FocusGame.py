@@ -29,13 +29,13 @@ class FocusGame:
 
         for i in range(6):
             for x in range(6):
-                self._gameboard.append([i, x])
+                self._gameboard.append([(i,x)])
         self._half = [i.append([self._Player[1][1]]) for j, i in enumerate(self._gameboard) if j in add_color1]
         self._final = [i.append([self._Player[0][1]]) for j, i in enumerate(self._gameboard) if j in add_color2]
         # Gameboard setup completed
         print(self._gameboard)
-        print(self._reserve)
-        print(self._captured)
+
+
     def move_piece(self, player, start, end, pieces):
         '''
         Takes the player making the move, a tuple representing the starting location, another tuple representing the
@@ -55,7 +55,9 @@ class FocusGame:
         '''
         Takes a position on the board and returns a list showing pieces at that location
         '''
-
+        for x in range(len(self._gameboard)):
+            if position == self._gameboard[x][0]:
+                return self._gameboard[x][1]
 
     def show_reserve(self, player):
         '''
@@ -97,9 +99,9 @@ class FocusGame:
 
 
 game = FocusGame(('PlayerA', 'R'), ('PlayerB','G'))
-print(game.show_reserve('PlayerB'))
+print(game.show_reserve('PlayerA'))
 # game.move_piece('PlayerA',(0,0), (0,1), 1)  #Returns message "successfully moved"
-# game.show_pieces((0,1)) #Returns ['R','R']
+print(game.show_pieces((0,1))) #Returns ['R','R']
 # game.show_captured('PlayerA') # Returns 0
 # game.reserved_move('PlayerA', (0,0)) # Returns message "No pieces in reserve"
 # game.show_reserve('PlayerA') # Returns 0
