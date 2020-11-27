@@ -45,11 +45,11 @@ class FocusGame:
             if (start[0] == end[0] and pieces >= start[1] - end[1]) or (start[1] == end[1]) and pieces >= (start[0] - end[0]):
                 for num1 in range(len(self._gameboard)):
                     if end == self._gameboard[num1][0]:
-                        return self._gameboard[num1][1].extend(move)
+                        self._gameboard[num1][1].extend(move)
                 for num2 in range(len(self._gameboard)):
                     if start == self._gameboard[num2][0]:
-                        del self._gameboard[num2][1]
-                    print(self._gameboard)
+                        for i in range(pieces):
+                            del self._gameboard[num2][1][-1]
     # def win(self):
 
     def move_helper(self, start, pieces):
