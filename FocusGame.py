@@ -50,8 +50,8 @@ class FocusGame:
     ''' '''
     def __init__(self, player, color):
         self._Player = (player, color)
-        self._reserve = {self._Player[0][0]:['R', 'R', 'R','R'],self._Player[1][0]:['G','G', 'G']}
-        self._captured = {self._Player[0][0]:['G','G'],self._Player[1][0]:[]}
+        self._reserve = {self._Player[0][0]:[],self._Player[1][0]:[]}
+        self._captured = {self._Player[0][0]:[],self._Player[1][0]:[]}
         self._gameboard = [] #contains list of lists in format:  [(row, column), [color stack]]
         self._count = 1
         add_color1 = [2,3,6,7,10,11,14,15,18,19,22,23,26,27,30,31,34,35]
