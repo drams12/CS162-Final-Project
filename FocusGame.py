@@ -1,5 +1,5 @@
 # Author: Dustin Ramsey 
-# Date: 11/21/2020
+# Date: 11/27/2020
 # Description:
 
 
@@ -8,10 +8,10 @@ class FocusGame:
     ''' '''
     def __init__(self, player, color):
         self._Player = (player, color)
-        self._reserve = {self._Player[0][0]:['R', 'R', 'R'],self._Player[1][0]:['G', 'G']}
-        self._captured = {self._Player[0][0]:[],self._Player[1][0]:[]}
+        self._reserve = {self._Player[0][0]:['R', 'R', 'R','R'],self._Player[1][0]:['G','G', 'G']}
+        self._captured = {self._Player[0][0]:['G','G'],self._Player[1][0]:[]}
         self._gameboard = [] #contains row, column, set of color stack
-
+        self._count = 1
         add_color1 = [2,3,6,7,10,11,14,15,18,19,22,23,26,27,30,31,34,35]
         add_color2 = [0,1,4,5,8,9,12,13,16,17,20,21,24,25,28,29,32,33]
 
@@ -21,9 +21,6 @@ class FocusGame:
         self._half = [i.append([self._Player[1][1]]) for j, i in enumerate(self._gameboard) if j in add_color1]
         self._final = [i.append([self._Player[0][1]]) for j, i in enumerate(self._gameboard) if j in add_color2]
         # Gameboard setup completed
-        print(self._gameboard)
-        print(self._reserve)
-        print(self._Player)
 
     def move_piece(self, player, start, end, pieces):
         '''
@@ -38,19 +35,53 @@ class FocusGame:
 
         Returns successfully moved if move successful and winning message if player makes winning move.
         '''
+        try:
+            if (self._count % 2 == 0 and player == self._Player[0][0]) or (self._count % 2 != 0 and player == self._Player[1][0]):
+                return False
+            if self.get_player_color(player) is self.check_piece(start):
+                if (start[0] == end[0] and pieces == abs(start[1] - end[1])) or\
+                        ((start[1] == end[1]) and pieces == abs(start[0] - end[0])):
+                    for num1 in range(len(self._gameboard)):
+                        if end == self._gameboard[num1][0]:
+                            self._gameboard[num1][1].extend(self.move_helper(start, pieces))
+                            self._count += 1
+                            if len(self._gameboard[num1][1]) > 5:
+                                self.more_than_five(player, end)
+                            if self.show_captured(player) > 5:
+                                return str(player) + " Wins"
+                    for num2 in range(len(self._gameboard)):
+                        if start == self._gameboard[num2][0]:
+                            for i in range(pieces):
+                                del self._gameboard[num2][1][-1]
+        except:
+            return False
+        else:
+            return 'successfully moved'
+
+    def win(self, player):
+        '''
+        Method that takes a player's name and checks for whether a player has 5 pieces in captured
+        and declares a winnerif so.
+        '''
+        if self.show_captured(player) > 5:
+            return str(player) + " Wins"
+
+    def more_than_five(self, player, end):
+        '''
+        Takes as a parameter the player and the ending location of their move. This method
+        checks to see if the ending location has surpassed the 5 piece limit. If so it pops
+        off bottom pieces and places pieces in reserve or captured depending on the player.
+        '''
         color = self.get_player_color(player)
-        move = self.move_helper(start, pieces)
-        print(move)
-        if color is self.check_piece(start)[-1]:
-            if (start[0] == end[0] and pieces >= start[1] - end[1]) or (start[1] == end[1]) and pieces >= (start[0] - end[0]):
-                for num1 in range(len(self._gameboard)):
-                    if end == self._gameboard[num1][0]:
-                        self._gameboard[num1][1].extend(move)
-                for num2 in range(len(self._gameboard)):
-                    if start == self._gameboard[num2][0]:
-                        for i in range(pieces):
-                            del self._gameboard[num2][1][-1]
-    # def win(self):
+        for num1 in range(len(self._gameboard)):
+            if end == self._gameboard[num1][0]:
+                while len(self._gameboard[num1][1]) > 5:
+                    if self._gameboard[num1][1][0] == color:
+                        self._reserve[player].append(self._gameboard[num1][1][0])
+                        self._gameboard[num1][1].pop(0)
+                    else:
+                        self._captured[player].append(self._gameboard[num1][1][0])
+                        self._gameboard[num1][1].pop(0)
 
     def move_helper(self, start, pieces):
         '''
@@ -82,12 +113,6 @@ class FocusGame:
         for num in range(len(self._gameboard)):
             if position == self._gameboard[num][0]:
                 return self._gameboard[num][1][-1]
-
-    def place_piece(self):
-        '''
-        Method used in the addition of board pieces to a new list
-        '''
-
 
     def show_pieces(self, position):
         '''
@@ -121,17 +146,23 @@ class FocusGame:
     def reserved_move(self, player, location):
         '''
         Takes the player name and a location on the board as parameters and places the piece from
-        the reserve at that location.
+        the reserve at that location. Uses more than five method if stacks become too large and
+        checks for winner as well.
         '''
         color = self.get_player_color(player)
         try:
             if player in self._reserve.keys() and len(self._reserve[player]) > 0:
                 for num in range(len(self._gameboard)):
                     if location == self._gameboard[num][0]:
-                        self._reserve[player].pop(0)
-                        return self._gameboard[num][1].append(color)
+                        self._reserve[player].pop(0) and self._gameboard[num][1].append(color)
+                    if len(self._gameboard[num][1]) > 5:
+                        self.more_than_five(player, location)
+                    if self.show_captured(player) > 5:
+                        return str(player) + " Wins"
         except:
             return False
+        else:
+            return 'successfully moved'
 
     def get_gameboard(self):
         '''
@@ -147,22 +178,19 @@ class FocusGame:
 
 
 game = FocusGame(('PlayerA', 'R'), ('PlayerB','G'))
-print(game.move_helper((0,0), 2))
 print(game.get_gameboard())
 
 print(game.show_reserve('PlayerA'))
 print(game.reserved_move('PlayerB', (0,0))) # Returns message "No pieces in reserve"
-
+print(game.reserved_move('PlayerA', (0,0)))
+print(game.reserved_move('PlayerA', (0,0)))
+print(game.reserved_move('PlayerA', (0,0)))
+print(game.reserved_move('PlayerA', (0,0)))
+print(game.reserved_move('PlayerA', (0,0)))
 print(game.get_gameboard())
 print(game.check_piece((0,0)))
-
-
-print(game.move_piece('PlayerB',(0,0), (0,2), 2))  #Returns message "successfully moved"
+print(game.move_piece('PlayerA',(0,0), (0,1), 3)) #Returns message "successfully moved"
 print(game.get_gameboard())
-
-print(game.check_piece((0,1))) #Returns ['R','R']
-
-print(game.show_captured('PlayerA')) # Returns 0
-print(game._reserve['PlayerA'])
-print(game.show_reserve('PlayerA')) # Returns 0
+print(game.more_than_five(("PlayerA"),(0,0)))
 print(game.get_gameboard())
+print(game.show_captured('PlayerA'))
