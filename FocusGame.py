@@ -49,14 +49,15 @@ class FocusGame:
                                 self.more_than_five(player, end)
                             if self.show_captured(player) > 5:
                                 return str(player) + " Wins"
+                            else:
+                                return 'successfully moved'
                     for num2 in range(len(self._gameboard)):
                         if start == self._gameboard[num2][0]:
                             for i in range(pieces):
                                 del self._gameboard[num2][1][-1]
         except:
             return False
-        else:
-            return 'successfully moved'
+
 
     def win(self, player):
         '''
@@ -176,21 +177,21 @@ class FocusGame:
 
 
 
-
-game = FocusGame(('PlayerA', 'R'), ('PlayerB','G'))
-print(game.get_gameboard())
-
-print(game.show_reserve('PlayerA'))
-print(game.reserved_move('PlayerB', (0,0))) # Returns message "No pieces in reserve"
-print(game.reserved_move('PlayerA', (0,0)))
-print(game.reserved_move('PlayerA', (0,0)))
-print(game.reserved_move('PlayerA', (0,0)))
-print(game.reserved_move('PlayerA', (0,0)))
-print(game.reserved_move('PlayerA', (0,0)))
-print(game.get_gameboard())
-print(game.check_piece((0,0)))
-print(game.move_piece('PlayerA',(0,0), (0,1), 3)) #Returns message "successfully moved"
-print(game.get_gameboard())
-print(game.more_than_five(("PlayerA"),(0,0)))
-print(game.get_gameboard())
-print(game.show_captured('PlayerA'))
+#
+# game = FocusGame(('PlayerA', 'R'), ('PlayerB','G'))
+# print(game.get_gameboard())
+#
+# print(game.show_reserve('PlayerA'))
+# print(game.reserved_move('PlayerB', (0,0))) # Returns message "No pieces in reserve"
+# print(game.reserved_move('PlayerA', (0,0)))
+# print(game.reserved_move('PlayerA', (0,0)))
+# print(game.reserved_move('PlayerA', (0,0)))
+# print(game.reserved_move('PlayerA', (0,0)))
+# print(game.reserved_move('PlayerA', (0,0)))
+# print(game.get_gameboard())
+# print(game.check_piece((0,0)))
+# print(game.move_piece('PlayerA',(0,0), (0,1), 1)) #Returns message "successfully moved"
+# print(game.get_gameboard())
+# print(game.more_than_five(("PlayerA"),(0,0)))
+# print(game.get_gameboard())
+# print(game.show_captured('PlayerA'))
