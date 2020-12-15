@@ -45,7 +45,6 @@
 # End of the Game
 # The first player who captures six pieces of the other player wins the game
 
-#
 # - Needs to return an error for empty source locations. (-2)
 # - Not moving some pieces correctly. For example, moving [G, R, G] on top of [R] is giving [R, G, G, R] which should be [R, G, R, G]. It is also leaving the original [G, R, G] stack there. (-10)
 # - Reserve move does not work correctly and needs to check for available pieces in reserve. (-5)
