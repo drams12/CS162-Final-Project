@@ -32,19 +32,13 @@ class Board:
 
 
     def create_board(self):
+        '''
+        Places the player's pieces in the correct spots on the board
+        '''
         col_evens = [0, 1, 4, 5]
         col_odds = [2,3]
         row_evens =[0, 2, 4]
         row_odds = [1, 3, 5]
-        #
-        # for i in range(6):
-        #     for x in range(6):
-        #         self._gameboard.append([(i, x)])
-        # self._half = [i.append([self._Player[1][1]]) for j, i in enumerate(self._gameboard) if j in add_color1]
-        # # adds the second player's color to the board for indices in list
-        # self._final = [i.append([self._Player[0][1]]) for j, i in enumerate(self._gameboard) if j in add_color2]
-        # # adds the first player's color to the board for indices in list
-        # Gameboard setup completed
 
         for row in range(ROWS):
             self.board.append([])
@@ -58,10 +52,11 @@ class Board:
                 else:
                     self.board[row].append(Piece(row, col, RED))
 
-            else:
-                self.board[row].append(0)
 
     def draw(self, win):
+        '''
+        draws the checkerboard pattern and the pieces on the board
+        '''
         self.draw_squares(win)
         for row in range(ROWS):
             for col in range(COLUMNS):
