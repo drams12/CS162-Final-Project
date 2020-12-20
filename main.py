@@ -5,17 +5,24 @@
 import pygame as pg
 from Domination.constants import *
 from Domination.board import *
+from Domination.constants import *
+from Domination.game import *
 
 FPS = 60
 
 WIN = pg.display.set_mode((WIDTH, HEIGHT))
 pg.display.set_caption('Domination')
 
+def get_row_col_from_mouse(pos):
+    x, y = pos
+    row = y // SQUARE_SIZE
+    col = x // SQUARE_SIZE
+    return row, col
 
 def main():
     run = True
     clock = pg.time.Clock()
-    board = Board()
+    game = Game(WIN)
 
     while run:
         clock.tick(FPS)
@@ -25,10 +32,13 @@ def main():
                 run = False
 
             if event.type == pg.MOUSEBUTTONDOWN:
-                pass
+                pos = pg.mouse.get_pos()
+                row, col = get_row_col_from_mouse(pos)
+                game.select(row, col)
 
-        board.draw(WIN)
-        pg.display.update()
+
+
+        game.update()
 
     pg.quit()
 
