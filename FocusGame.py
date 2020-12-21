@@ -1,6 +1,12 @@
 # Author: Dustin Ramsey 
 # Date: 11/27/2020
-# Description: Program to play the game Focus/ Domination.
+# Description:
+#
+# Final version of my portfolio project for intro to cs 2. I am currently reworking it using pygame.
+# This file simply serves as an example and reference for the games rules if needed and to see the
+# changes implemented in the playable version.
+#
+# Program to play the game Focus/ Domination.
 # Contains a class FocusGame that initializes the players with their color, dictionaries for reserved and
 # captured pieces, a counter to keep track of the player's turn, and the gameboard.
 #
@@ -41,12 +47,14 @@
 # reserve piece can be placed on an empty space, on a space containing one piece, or a space containing multiple
 # pieces. Placing the reserve piece counts as your turn as you don’t get to move the piece you just added to the
 # gameboard.
-
+#
 # End of the Game
 # The first player who captures six pieces of the other player wins the game
-
+#
+# Areas that I lost points and need to fix in the playable version.
 # - Needs to return an error for empty source locations. (-2)
-# - Not moving some pieces correctly. For example, moving [G, R, G] on top of [R] is giving [R, G, G, R] which should be [R, G, R, G]. It is also leaving the original [G, R, G] stack there. (-10)
+# - Not moving some pieces correctly. For example, moving [G, R, G] on top of [R] is giving [R, G, G, R]
+# which should be [R, G, R, G]. It is also leaving the original [G, R, G] stack there. (-10)
 # - Reserve move does not work correctly and needs to check for available pieces in reserve. (-5)
 # - Attempts to make valid moves are returning False. Ex. Moving a stack of 5 on top of a stack of 1. (-3)
 

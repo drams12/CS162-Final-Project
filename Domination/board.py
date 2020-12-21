@@ -13,10 +13,10 @@ class Board:
     '''
     def __init__(self):
         self.board = []
-        self.selected_piece = None
         self.red_captured = self.blue_captured = 0
         self.red_reserve = self.blue_reserve = 0
         self.create_board()
+        self.selected = None
 
     def draw_squares(self, win):
         '''
@@ -30,6 +30,12 @@ class Board:
             for col in range((row + 1) % 2, COLUMNS, 2):
                 pg.draw.rect(win, GREY, (row * SQUARE_SIZE, col * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE))
 
+    def move(self, piece, row, col):
+        self.board[piece.row][piece.col], self.board[row][col] = self.board[row][col], self.board[piece.row][piece.col]
+        piece.move(row, col)
+
+    def get_piece(self, row, col):
+        return self.board[row][col]
 
     def create_board(self):
         '''
@@ -63,3 +69,88 @@ class Board:
                 piece = self.board[row][col]
                 if piece != 0:
                     piece.draw(win)
+
+    def select(self, row, col):
+        if self.selected:
+            result = self._move(row, col)
+            if not result:
+                self.selected = None
+                self.select(row, col)
+
+        if piece.color == self.turn:
+            self.valid_moves = self.board.get_valid_moves(piece)
+            return True
+
+        return False
+
+    def get_valid_moves(self, piece):
+        moves = {}
+        # left = piece.col - 1
+        # right = piece.col + 1
+        # up = piece.row - 1
+        # down = piece.row + 1
+        row = piece.row
+        col = piece.col
+        pieces = 0
+        for piece in (row, col):
+            pieces += piece
+
+
+        moves.update(self.move_left(row, col))
+        moves.update(self.move_right(row, col))
+        moves.update(self.move_up(col, row))
+        moves.update(self.move_down(col, row))
+        return moves
+
+    def move_left(self, row, col):
+        moves = {}
+        pieces = 0
+        for piece in (row, col):
+            pieces += piece
+            if col < 0 or col > 5:
+                 return moves
+            if pieces == 0:
+                return moves
+            else:
+                moves.update(self.move_left(row, col - pieces))
+                pieces -= 1
+
+
+    def move_right(self, row, col):
+        moves = {}
+        pieces = 0
+        for piece in (row, col):
+            pieces += piece
+            if col > 5 or col < 0:
+                return moves
+            if pieces == 0:
+                return moves
+            else:
+                moves.update(self.move_right(row, col + pieces))
+                pieces -= 1
+
+    def move_up(self, col, row):
+        moves = {}
+        pieces = 0
+        for piece in (row, col):
+            pieces += piece
+            if row < 0 or row > 5:
+                return moves
+            if pieces == 0:
+                return moves
+            else:
+                moves.update(self.move_up(col, row - pieces))
+                pieces -= 1
+
+    def move_down(self, col, row):
+        moves = {}
+        pieces = 0
+        for piece in (row, col):
+            pieces += piece
+            if row > 5 or row < 0:
+                return moves
+            if pieces == 0:
+                return moves
+            else:
+                moves.update(self.move_down(col, row + pieces))
+                pieces -= 1

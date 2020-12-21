@@ -13,7 +13,6 @@ class Piece:
         self.row = row
         self.col = col
         self.color = color
-        self.int_val = 1
         self.reserve_red_player = 0
         self.reserve_blue_player = 0
         self.captured_red_player = 0
@@ -49,10 +48,6 @@ class Piece:
         self.row = row
         self.col = col
         self.calc_pos()
-
-    def stack_length(self, row, col):
-
-        return self.int_val
 
     def __repr__(self):
         '''
